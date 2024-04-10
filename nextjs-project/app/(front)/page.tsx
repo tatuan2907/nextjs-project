@@ -1,4 +1,4 @@
-import Productitem from "@/components/products/Productitem";
+import Productitem from "@/components/products/ProductItem";
 import data from "@/lib/data";
 import productService from "@/lib/services/productService";
 import { converDocToObj } from "@/lib/utils";
@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || 'Amazona',
+  title: process.env.NEXT_PUBLIC_APP_NAME || 'Next Shop',
   description:
     process.env.NEXT_PUBLIC_APP_DESC ||
     'ABC'
