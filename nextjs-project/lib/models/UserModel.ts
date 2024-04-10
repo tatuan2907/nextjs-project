@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
 import { unique } from "next/dist/build/utils";
 
+export type User = {
+    _id: string
+    name: string
+    email: string
+    isAdmin: boolean
+}
+
 const UserSchema = new mongoose.Schema(
     {
         name: {
