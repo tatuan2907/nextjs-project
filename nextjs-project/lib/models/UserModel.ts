@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import { unique } from "next/dist/build/utils";
+import mongoose from "mongoose"
 
 export type User = {
     _id: string
@@ -12,27 +11,22 @@ const UserSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            require: true,
+            required: true,
         },
         email: {
             type: String,
-            require: true,
+            required: true,
             unique: true,
         },
         password: {
             type: String,
-            require: true,
+            required: true,
         },
-        isAdmin: {
-            type: Boolean,
-            require: true,
-            default: false
-        },
+        isAdmin: { type: Boolean, required: true, default: false },
     },
-    {
-        timestamps: true,
-    }
+    { timestamps: true }
 )
 
-const UserModel = mongoose.models.User || mongoose.model('User', UserSchema)
+const UserModel = mongoose.models?.User || mongoose.model('User', UserSchema)
+
 export default UserModel

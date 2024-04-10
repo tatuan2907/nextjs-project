@@ -1,10 +1,45 @@
 import { auth } from '@/lib/auth'
 import dbConnect from '@/lib/dbConnect'
-import ProductModel from '@/lib/models/ProductModels'
+import ProductModel from '@/lib/models/ProductModel'
 
+export const DELETE = auth(async (...args: any) => {
+    const [req, { params }] = args
+
+    if (!req.auth || !req.auth.user?.isAdmin) {
+        return Response.json(
+            { message: 'unauthorized' },
+            {
+                status: 401,
+            }
+        )
+    }
+
+    try {
+        await dbConnect()
+        const product = await ProductModel.findById(params.id)
+        if (product) {
+            await product.deleteOne()
+            return Response.json({ message: 'Product deleted successfully' })
+        } else {
+            return Response.json(
+                { message: 'Product not found' },
+                {
+                    status: 404,
+                }
+            )
+        }
+    } catch (err: any) {
+        return Response.json(
+            { message: err.message },
+            {
+                status: 500,
+            }
+        )
+    }
+}) as any
 export const GET = auth(async (...args: any) => {
     const [req, { params }] = args
-    if (!req.auth || !req.auth.user?.isAdmin) {
+    if (!req.auth) {
         return Response.json(
             { message: 'unauthorized' },
             {
@@ -25,9 +60,9 @@ export const GET = auth(async (...args: any) => {
     return Response.json(product)
 }) as any
 
-export const PUT = auth(async (...args: any) => {
-    const [req, { params }] = args
-    if (!req.auth || !req.auth.user?.isAdmin) {
+export const PUT = auth(async (...p: any) => {
+    const [req, { params }] = p
+    if (!req.auth) {
         return Response.json(
             { message: 'unauthorized' },
             {
@@ -63,42 +98,6 @@ export const PUT = auth(async (...args: any) => {
 
             const updatedProduct = await product.save()
             return Response.json(updatedProduct)
-        } else {
-            return Response.json(
-                { message: 'Product not found' },
-                {
-                    status: 404,
-                }
-            )
-        }
-    } catch (err: any) {
-        return Response.json(
-            { message: err.message },
-            {
-                status: 500,
-            }
-        )
-    }
-}) as any
-
-export const DELETE = auth(async (...args: any) => {
-    const [req, { params }] = args
-
-    if (!req.auth || !req.auth.user?.isAdmin) {
-        return Response.json(
-            { message: 'unauthorized' },
-            {
-                status: 401,
-            }
-        )
-    }
-
-    try {
-        await dbConnect()
-        const product = await ProductModel.findById(params.id)
-        if (product) {
-            await product.deleteOne()
-            return Response.json({ message: 'Product deleted successfully' })
         } else {
             return Response.json(
                 { message: 'Product not found' },

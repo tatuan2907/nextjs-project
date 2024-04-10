@@ -7,7 +7,7 @@ export function generateMetadata({ params }: { params: { id: string } }) {
     }
 }
 
-export default function ProductEditPage({
+export default function OrderHistory({
     params,
 }: {
     params: { id: string }

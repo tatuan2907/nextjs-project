@@ -1,5 +1,5 @@
 'use client'
-import { Product } from '@/lib/models/ProductModels'
+import { Product } from '@/lib/models/ProductModel'
 import { formatId } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -9,7 +9,6 @@ import useSWRMutation from 'swr/mutation'
 
 export default function Products() {
     const { data: products, error } = useSWR(`/api/admin/products`)
-
     const router = useRouter()
 
     const { trigger: deleteProduct } = useSWRMutation(
@@ -83,7 +82,7 @@ export default function Products() {
                     <tbody>
                         {products.map((product: Product) => (
                             <tr key={product._id}>
-                                <td>{formatId(product._id!)}</td>
+                                <td>{formatId(product._id)}</td>
                                 <td>{product.name}</td>
                                 <td>${product.price}</td>
                                 <td>{product.category}</td>
@@ -99,7 +98,7 @@ export default function Products() {
                                     </Link>
                                     &nbsp;
                                     <button
-                                        onClick={() => deleteProduct({ productId: product._id! })}
+                                        onClick={() => deleteProduct({ productId: product._id })}
                                         type="button"
                                         className="btn btn-ghost btn-sm"
                                     >

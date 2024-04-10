@@ -1,6 +1,6 @@
 'use client'
 
-import useCartService from "@/lib/hooks/useCartStore"
+import useCartService from "@/lib/hook/useCartStore"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -20,9 +20,10 @@ export default function CartDetails() {
     return (
         <>
             <h1 className="py-4 text-2xl">Shopping Cart</h1>
+
             {items.length === 0 ? (
                 <div>
-                    Cart is empty. <Link href={"/"}>Go Shopping</Link>
+                    Cart is empty. <Link href='/'>Go shopping</Link>
                 </div>
             ) : (
                 <div className="grid md:grid-cols-4 md:gap-5">
@@ -36,10 +37,13 @@ export default function CartDetails() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {items.map((item) => (
+                                {items.map((item)=>(
                                     <tr key={item.slug}>
                                         <td>
-                                            <Link href={`/product/${item.slug}`} className="flex items-center">
+                                            <Link
+                                                href={`/product/${item.slug}`}
+                                                className="flex items-center"
+                                            >
                                                 <Image
                                                     src={item.image}
                                                     alt={item.name}
@@ -55,14 +59,18 @@ export default function CartDetails() {
                                             <button
                                                 className="btn"
                                                 type="button"
-                                                onClick={() => decrease(item)}
-                                            >-</button>
-                                            <span className="px-2">{item.quantity}</span>
+                                                onClick={()=> decrease(item)}
+                                            >
+                                                -
+                                            </button>
+                                            <span className="px-2">{item.qty}</span>
                                             <button
                                                 className="btn"
                                                 type="button"
-                                                onClick={() => increase(item)}
-                                            >+</button>
+                                                onClick={()=> increase(item)}
+                                            >
+                                                +
+                                            </button>
                                         </td>
                                         <td>${item.price}</td>
                                     </tr>
@@ -76,7 +84,8 @@ export default function CartDetails() {
                                 <ul>
                                     <li>
                                         <div className="pb-3 text-xl">
-                                            Subtotal ({items.reduce((a, c) => a + c.quantity, 0)}) : ${itemsPrice}
+                                            Subtotal ({items.reduce((a,c) => a + c.qty, 0)}) : $
+                                            {itemsPrice}
                                         </div>
                                     </li>
                                     <li>
@@ -84,7 +93,7 @@ export default function CartDetails() {
                                             onClick={() => router.push('/shipping')}
                                             className="btn btn-primary w-full"
                                         >
-                                            Checkout
+                                            Proceed to Checkout
                                         </button>
                                     </li>
                                 </ul>
@@ -92,8 +101,7 @@ export default function CartDetails() {
                         </div>
                     </div>
                 </div>
-            )
-            }
+            )}
         </>
     )
 }
