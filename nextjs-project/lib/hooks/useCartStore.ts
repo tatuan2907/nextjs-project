@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { round2 } from "../utils";
-import { OrderItem } from "../models/OrderModel";
+import { OrderItem, ShippingAddress } from "../models/OrderModel";
 import { persist } from "zustand/middleware";
 
 type Cart = {
@@ -9,6 +9,9 @@ type Cart = {
     taxPrice: number;
     shippingPrice: number;
     totalPrice: number;
+
+    paymentMethod?: string;
+    shippingAddress?: ShippingAddress
 }
 const initialState: Cart = {
     items: [],
