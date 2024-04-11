@@ -3,7 +3,6 @@ import { converDocToObj } from '@/lib/utils'
 import productService from '@/lib/services/productService'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Rating } from '@/components/products/Rating'
 
 export async function generateMetadata({
     params,
@@ -31,12 +30,10 @@ export default async function ProductDetails({
     }
     return (
         <>
-            <div className="badge badge-info gap-2">
-                <Link href="/">
-                    Quay lại
-                </Link>
-            </div>
-            <div className="grid md:grid-cols-4 md:gap-3">
+            <Link className='btn btn-ghost py-4 bg-gray-600 ' href="/">
+                Quay lại
+            </Link>
+            <div className="grid md:grid-cols-4 md:gap-3 mt-4">
                 <div className="md:col-span-2">
                     <Image
                         src={product.image}
@@ -54,12 +51,6 @@ export default async function ProductDetails({
                     <ul className="space-y-4">
                         <li>
                             <h1 className="text-xl">{product.name}</h1>
-                        </li>
-                        <li>
-                            <Rating
-                                value={product.rating}
-                                caption={`${product.numRviews} ratings`}
-                            />
                         </li>
                         <li> {product.brand}</li>
                         <li>
@@ -99,6 +90,7 @@ export default async function ProductDetails({
                     </div>
                 </div>
             </div>
+
         </>
     )
 }

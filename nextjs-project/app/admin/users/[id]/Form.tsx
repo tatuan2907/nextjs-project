@@ -5,19 +5,15 @@ import toast from 'react-hot-toast'
 import Link from 'next/link'
 import { ValidationRule, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
-import { Product } from '@/lib/models/ProductModel'
+import { User } from '@/lib/models/UserModel'
 import { formatId } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
-export default function ProductEditForm({
-    productId,
-}: {
-    productId: string
-}) {
-    const { data, error } = useSWR(`/api/admin/products/${productId}`)
+export default function UserEditForm({ userId }: { userId: string }) {
+    const { data: user, error } = useSWR(`/api/admin/users/${userId}`)
     const router = useRouter()
-    const { trigger: updateProduct, isMutating: isUpdating } = useSWRMutation(
-        `/api/admin/products/${productId}`,
+    const { trigger: updateUser, isMutating: isUpdating } = useSWRMutation(
+        `/api/admin/users/${userId}`,
         async (url, { arg }) => {
             const res = await fetch(`${url}`, {
                 method: 'PUT',
@@ -29,8 +25,8 @@ export default function ProductEditForm({
             const data = await res.json()
             if (!res.ok) return toast.error(data.message)
 
-            toast.success('Product updated successfully')
-            router.push('/admin/products')
+            toast.success('User updated successfully')
+            router.push('/admin/users')
         }
     )
 
@@ -39,26 +35,21 @@ export default function ProductEditForm({
         handleSubmit,
         formState: { errors },
         setValue,
-    } = useForm<Product>()
+    } = useForm<User>()
 
     useEffect(() => {
-        if (!data) return
-        setValue('name', data.name)
-        setValue('slug', data.slug)
-        setValue('price', data.price)
-        setValue('image', data.image)
-        setValue('category', data.category)
-        setValue('brand', data.brand)
-        setValue('countInStock', data.countInStock)
-        setValue('description', data.description)
-    }, [data, setValue])
+        if (!user) return
+        setValue('name', user.name)
+        setValue('email', user.email)
+        setValue('isAdmin', user.isAdmin)
+    }, [user, setValue])
 
     const formSubmit = async (formData: any) => {
-        await updateProduct(formData)
+        await updateUser(formData)
     }
 
     if (error) return error.message
-    if (!data) return 'Loading...'
+    if (!user) return 'Loading...'
 
     const FormInput = ({
         id,
@@ -66,12 +57,12 @@ export default function ProductEditForm({
         required,
         pattern,
     }: {
-        id: keyof Product
+        id: keyof User
         name: string
         required?: boolean
         pattern?: ValidationRule<RegExp>
     }) => (
-        <div className="md:flex mb-6">
+        <div className="md:flex my-3">
             <label className="label md:w-1/5" htmlFor={id}>
                 {name}
             </label>
@@ -94,27 +85,34 @@ export default function ProductEditForm({
 
     return (
         <div>
-            <h1 className="text-2xl py-4">Form Product</h1>
+            <h1 className="text-2xl py-4">Edit User {formatId(userId)}</h1>
             <div>
                 <form onSubmit={handleSubmit(formSubmit)}>
                     <FormInput name="Name" id="name" required />
-                    <FormInput name="Slug" id="slug" required />
-                    <FormInput name="Image" id="image" required />
-                    <FormInput name="Price" id="price" required />
-                    <FormInput name="Category" id="category" required />
-                    <FormInput name="Brand" id="brand" required />
-                    <FormInput name="Description" id="description" required />
-                    <FormInput name="Count In Stock" id="countInStock" required />
+                    <FormInput name="Email" id="email" required />
 
+                    <div className="md:flex my-3">
+                        <label className="label md:w-1/5" htmlFor="isAdmin">
+                            Admin
+                        </label>
+                        <div className="md:w-4/5">
+                            <input
+                                id="isAdmin"
+                                type="checkbox"
+                                className="toggle"
+                                {...register('isAdmin')}
+                            />
+                        </div>
+                    </div>
                     <button
                         type="submit"
                         disabled={isUpdating}
-                        className="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"
+                        className="btn  bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 "
                     >
                         {isUpdating && <span className="loading loading-spinner"></span>}
-                        Accept
+                        Update
                     </button>
-                    <Link className="btn ml-4 " href="/admin/products">
+                    <Link className="btn ml-4" href="/admin/users">
                         Cancel
                     </Link>
                 </form>

@@ -7,14 +7,10 @@ export function generateMetadata({ params }: { params: { id: string } }) {
     }
 }
 
-export default function EditUser({
-    params,
-}: {
-    params: { id: string }
-}) {
+export default function UserEditPage({ params }: { params: { id: string } }) {
     return (
-        <AdminLayout activeItem= "products" >
-        <Form userId={ params.id } />
-            < /AdminLayout>
-  )
+        <AdminLayout activeItem="users">
+            <Form userId={params.id} />
+        </AdminLayout>
+    )
 }

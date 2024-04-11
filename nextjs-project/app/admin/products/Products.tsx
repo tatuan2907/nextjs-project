@@ -59,7 +59,7 @@ export default function Products() {
                 <button
                     disabled={isCreating}
                     onClick={() => createProduct()}
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-sm bg-cyan-500 text-white"
                 >
                     {isCreating && <span className="loading loading-spinner"></span>}
                     Create
